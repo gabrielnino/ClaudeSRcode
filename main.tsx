@@ -1727,9 +1727,9 @@ async function run(): Promise<CommanderCommand> {
       }
     }
 
-    // This await replaces blocking existsSync/statSync calls that were already in
     // the startup path. Wall-clock time is unchanged; we just yield to the event
     // loop during the fs I/O instead of blocking it. See #19661.
+    console.log('DEBUG: before initializeToolPermissionContext');
     const initResult = await initializeToolPermissionContext({
       allowedToolsCli: allowedTools,
       disallowedToolsCli: disallowedTools,
@@ -1738,6 +1738,7 @@ async function run(): Promise<CommanderCommand> {
       allowDangerouslySkipPermissions,
       addDirs: addDir
     });
+    console.log('DEBUG: after initializeToolPermissionContext');
     let toolPermissionContext = initResult.toolPermissionContext;
     const {
       warnings,
@@ -1844,7 +1845,9 @@ async function run(): Promise<CommanderCommand> {
       process.exit(1);
     }
     const effectivePrompt = prompt || '';
+    console.log('DEBUG: before getInputPrompt');
     let inputPrompt = await getInputPrompt(effectivePrompt, (inputFormat ?? 'text') as 'text' | 'stream-json');
+    console.log('DEBUG: after getInputPrompt');
     profileCheckpoint('action_after_input_prompt');
 
     // Activate proactive mode BEFORE getTools() so SleepTool.isEnabled()
@@ -1917,7 +1920,9 @@ async function run(): Promise<CommanderCommand> {
     // ~28ms setupPromise await before Promise.all joins them below.
     commandsPromise?.catch(() => {});
     agentDefsPromise?.catch(() => {});
+    console.log('DEBUG: before setupPromise await');
     await setupPromise;
+    console.log('DEBUG: after setupPromise await');
     logForDebugging(`[STARTUP] setup() completed in ${Date.now() - setupStart}ms`);
     profileCheckpoint('action_after_setup');
 
@@ -2012,7 +2017,9 @@ async function run(): Promise<CommanderCommand> {
     const commandsStart = Date.now();
     // Join the promises kicked before setup() (or start fresh if
     // worktreeEnabled gated the early kick). Both memoized by cwd.
+    console.log('DEBUG: before commands/agentDefs Promise.all');
     const [commands, agentDefinitionsResult] = await Promise.all([commandsPromise ?? getCommands(currentCwd), agentDefsPromise ?? getAgentDefinitionsWithOverrides(currentCwd)]);
+    console.log('DEBUG: after commands/agentDefs Promise.all');
     logForDebugging(`[STARTUP] Commands and agents loaded in ${Date.now() - commandsStart}ms`);
     profileCheckpoint('action_commands_loaded');
 
