@@ -1,6 +1,6 @@
 import { c as _c } from "react/compiler-runtime";
 import { feature } from 'bun:bundle';
-import React, { useContext, useEffect, useEffectEvent, useState, useSyncExternalStore } from 'react';
+import React, { useContext, useEffect,  useState, useSyncExternalStore } from 'react';
 import { MailboxProvider } from '../context/mailbox.js';
 import { useSettingsChange } from '../hooks/useSettingsChange.js';
 import { logForDebugging } from '../utils/debug.js';
@@ -8,6 +8,17 @@ import { createDisabledBypassPermissionsContext, isBypassPermissionsModeDisabled
 import { applySettingsChange } from '../utils/settings/applySettingsChange.js';
 import type { SettingSource } from '../utils/settings/constants.js';
 import { createStore } from './store.js';
+
+import { useLayoutEffect as _useLayoutEffect, useCallback as _useCallback, useRef as _useRef } from 'react';
+function useEffectEvent<T extends Function>(fn: T): T {
+  const ref = _useRef<T>(fn);
+  _useLayoutEffect(() => {
+    ref.current = fn;
+  });
+  return _useCallback((...args: any[]) => {
+    return (ref.current as any)(...args);
+  }, []) as unknown as T;
+}
 
 // DCE: voice context is ant-only. External builds get a passthrough.
 /* eslint-disable @typescript-eslint/no-require-imports */

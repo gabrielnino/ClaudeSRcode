@@ -13,7 +13,15 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["./*"],
-      "bun:bundle": ["./bun-bundle-shim.ts"]
+      "bun:bundle": ["./bun-bundle-shim.ts"],
+      "@anthropic-ai/sandbox-runtime": ["./sandbox-shim.ts"],
+      "@ant/*": ["./empty-shim.ts"],
+      "@anthropic-ai/claude-agent-sdk": ["./empty-shim.ts"],
+      "@anthropic-ai/mcpb": ["./empty-shim.ts"],
+      "react/compiler-runtime": ["./react-compiler-runtime-shim.ts"],
+      "color-diff-napi": ["./empty-shim.ts"],
+      "react-reconciler/constants.js": ["./react-reconciler-constants-shim.ts"],
+      "react": ["./react-shim.ts"]
     }
   },
   "include": [
