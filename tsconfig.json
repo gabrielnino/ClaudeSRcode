@@ -19,7 +19,7 @@
       "@anthropic-ai/claude-agent-sdk": ["./empty-shim.ts"],
       "@anthropic-ai/mcpb": ["./empty-shim.ts"],
       "react/compiler-runtime": ["./react-compiler-runtime-shim.ts"],
-      "color-diff-napi": ["./empty-shim.ts"],
+      "color-diff-napi": ["./native-ts/color-diff/index.ts"],
       "react-reconciler/constants.js": ["./react-reconciler-constants-shim.ts"],
       "react": ["./react-shim.ts"]
     }

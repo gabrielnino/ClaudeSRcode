@@ -2,6 +2,7 @@ import { feature } from 'bun:bundle';
 
 // Bugfix for corepack auto-pinning, which adds yarnpkg to peoples' package.jsons
 // eslint-disable-next-line custom-rules/no-top-level-side-effects
+console.log('DEBUG: cli.tsx top-level entry');
 process.env.COREPACK_ENABLE_AUTO_PIN = '0';
 
 // Set max heap size for child processes in CCR environments (containers have 16GB)
@@ -289,10 +290,12 @@ async function main(): Promise<void> {
     startCapturingEarlyInput
   } = await import('../utils/earlyInput.js');
   startCapturingEarlyInput();
+  console.log('DEBUG: cli.tsx before main import');
   profileCheckpoint('cli_before_main_import');
   const {
     main: cliMain
   } = await import('../main.js');
+  console.log('DEBUG: cli.tsx after main import');
   profileCheckpoint('cli_after_main_import');
   await cliMain();
   profileCheckpoint('cli_after_main_complete');
