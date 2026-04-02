@@ -1,3 +1,11 @@
+(globalThis as any).MACRO = {
+  VERSION: "1.0.0-local",
+  PACKAGE_URL: "https://npmjs.com/package/@anthropic-ai/claude-code",
+  ISSUES_EXPLAINER: "issues",
+  VERSION_CHANGELOG: "1.0.0",
+  NATIVE_PACKAGE_URL: "",
+  FEEDBACK_CHANNEL: "github"
+};
 // These side-effects must run before all other imports:
 // 1. profileCheckpoint marks entry before heavy module evaluation begins
 // 2. startMdmRawRead fires MDM subprocesses (plutil/reg query) so they run in
