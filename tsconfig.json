@@ -20,6 +20,12 @@
       "@anthropic-ai/mcpb": ["./empty-shim.ts"],
       "react/compiler-runtime": ["./react-compiler-runtime-shim.ts"],
       "color-diff-napi": ["./native-ts/color-diff/index.ts"],
+      "fflate": ["./empty-shim.ts"],
+      "sharp": ["./empty-shim.ts"],
+      "turndown": ["./empty-shim.ts"],
+      "modifiers-napi": ["./empty-shim.ts"],
+      "url-handler-napi": ["./empty-shim.ts"],
+      "@opentelemetry/exporter-*": ["./empty-shim.ts"],
       "react-reconciler/constants.js": ["./react-reconciler-constants-shim.ts"],
       "react": ["./react-shim.ts"]
     }

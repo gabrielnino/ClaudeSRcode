@@ -1,3 +1,4 @@
+console.log('DEBUG: runtime-env.ts top-level entry');
 // Polyfill for Bun compilation macros
 (globalThis as any).MACRO = {
   VERSION: "1.0.0-local",
