@@ -1,4 +1,12 @@
 import { feature } from 'bun:bundle';
+(globalThis as any).MACRO = {
+  VERSION: "1.0.0-local",
+  PACKAGE_URL: "https://npmjs.com/package/@anthropic-ai/claude-code",
+  ISSUES_EXPLAINER: "issues",
+  VERSION_CHANGELOG: "1.0.0",
+  NATIVE_PACKAGE_URL: "",
+  FEEDBACK_CHANNEL: "github"
+};
 
 // Bugfix for corepack auto-pinning, which adds yarnpkg to peoples' package.jsons
 // eslint-disable-next-line custom-rules/no-top-level-side-effects
