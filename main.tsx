@@ -894,8 +894,8 @@ async function run(): Promise<CommanderCommand> {
   // not when displaying help. This avoids the need for env variable signaling.
   program.hook('preAction', async thisCommand => {
     console.log('DEBUG: preAction started');
-    await Promise.all([ensureMdmSettingsLoaded(), ensureKeychainPrefetchCompleted()]);
-    console.log('DEBUG: MDM and Keychain loaded');
+    // await Promise.all([ensureMdmSettingsLoaded(), ensureKeychainPrefetchCompleted()]);
+    console.log('DEBUG: MDM and Keychain checks skipped');
     await init();
     console.log('DEBUG: init finished');
 
