@@ -896,8 +896,9 @@ async function run(): Promise<CommanderCommand> {
     console.log('DEBUG: preAction started');
     // await Promise.all([ensureMdmSettingsLoaded(), ensureKeychainPrefetchCompleted()]);
     console.log('DEBUG: MDM and Keychain checks skipped');
+    console.log('DEBUG: calling init()...');
     await init();
-    console.log('DEBUG: init finished');
+    console.log('DEBUG: init() finished');
 
     // process.title on Windows sets the console title directly; on POSIX,
     // terminal shell integration may mirror the process name to the tab.
@@ -987,7 +988,7 @@ async function run(): Promise<CommanderCommand> {
   // top-level option. Single-value + collect accumulator means each
   // --plugin-dir takes exactly one arg; repeat the flag for multiple dirs.
   .option('--plugin-dir <path>', 'Load plugins from a directory for this session only (repeatable: --plugin-dir A --plugin-dir B)', (val: string, prev: string[]) => [...prev, val], [] as string[]).option('--disable-slash-commands', 'Disable all skills', () => true).option('--chrome', 'Enable Claude in Chrome integration').option('--no-chrome', 'Disable Claude in Chrome integration').option('--file <specs...>', 'File resources to download at startup. Format: file_id:relative_path (e.g., --file file_abc:doc.txt file_def:img.png)').action(async (prompt, options) => {
-    console.log('DEBUG: main.tsx action handler started');
+    console.log('DEBUG: main.tsx action handler entry');
     profileCheckpoint('action_handler_start');
 
     // --bare = one-switch minimal mode. Sets SIMPLE so all the existing

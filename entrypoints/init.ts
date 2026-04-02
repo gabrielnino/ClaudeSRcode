@@ -59,6 +59,7 @@ export const init = memoize(async (): Promise<void> => {
   console.log('DEBUG: init() entry');
   logForDiagnosticsNoPII('info', 'init_started')
   profileCheckpoint('init_function_start')
+  console.log('DEBUG: init() configs enabling...');
 
   // Validate configs are valid and enable configuration system
   try {
@@ -68,6 +69,7 @@ export const init = memoize(async (): Promise<void> => {
       duration_ms: Date.now() - configsStart,
     })
     profileCheckpoint('init_configs_enabled')
+    console.log('DEBUG: init() configs enabled');
 
     // Apply only safe environment variables before trust dialog
     // Full environment variables are applied after trust is established
@@ -85,10 +87,12 @@ export const init = memoize(async (): Promise<void> => {
       duration_ms: Date.now() - envVarsStart,
     })
     profileCheckpoint('init_safe_env_vars_applied')
+    console.log('DEBUG: init() safe env vars applied');
 
     // Make sure things get flushed on exit
     setupGracefulShutdown()
     profileCheckpoint('init_after_graceful_shutdown')
+    console.log('DEBUG: init() graceful shutdown setup');
 
     // Initialize 1P event logging (no security concerns, but deferred to avoid
     // loading OpenTelemetry sdk-logs at startup). growthbook.js is already in
@@ -144,6 +148,7 @@ export const init = memoize(async (): Promise<void> => {
     })
     logForDebugging('[init] configureGlobalMTLS complete')
     console.log('DEBUG: init() after configureGlobalMTLS');
+    console.log('DEBUG: init() configuring global agents...');
 
     // Configure global HTTP agents (proxy and/or mTLS)
     const proxyStart = Date.now()
@@ -164,6 +169,7 @@ export const init = memoize(async (): Promise<void> => {
     // proxy/mTLS/unix/cloud-provider where the SDK's dispatcher wouldn't
     // reuse the global pool.
     preconnectAnthropicApi()
+    console.log('DEBUG: init() preconnectAnthropicApi called');
 
     // CCR upstreamproxy: start the local CONNECT relay so agent subprocesses
     // can reach org-configured upstreams with credential injection. Gated on
