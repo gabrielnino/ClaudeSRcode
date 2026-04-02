@@ -56,6 +56,7 @@ let telemetryInitialized = false
 
 export const init = memoize(async (): Promise<void> => {
   const initStartTime = Date.now()
+  console.log('DEBUG: init() entry');
   logForDiagnosticsNoPII('info', 'init_started')
   profileCheckpoint('init_function_start')
 
@@ -71,7 +72,9 @@ export const init = memoize(async (): Promise<void> => {
     // Apply only safe environment variables before trust dialog
     // Full environment variables are applied after trust is established
     const envVarsStart = Date.now()
+    console.log('DEBUG: init() before applySafeConfigEnvironmentVariables');
     applySafeConfigEnvironmentVariables()
+    console.log('DEBUG: init() after applySafeConfigEnvironmentVariables');
 
     // Apply NODE_EXTRA_CA_CERTS from settings.json to process.env early,
     // before any TLS connections. Bun caches the TLS cert store at boot
@@ -134,20 +137,24 @@ export const init = memoize(async (): Promise<void> => {
     // Configure global mTLS settings
     const mtlsStart = Date.now()
     logForDebugging('[init] configureGlobalMTLS starting')
+    console.log('DEBUG: init() before configureGlobalMTLS');
     configureGlobalMTLS()
     logForDiagnosticsNoPII('info', 'init_mtls_configured', {
       duration_ms: Date.now() - mtlsStart,
     })
     logForDebugging('[init] configureGlobalMTLS complete')
+    console.log('DEBUG: init() after configureGlobalMTLS');
 
     // Configure global HTTP agents (proxy and/or mTLS)
     const proxyStart = Date.now()
     logForDebugging('[init] configureGlobalAgents starting')
+    console.log('DEBUG: init() before configureGlobalAgents');
     configureGlobalAgents()
     logForDiagnosticsNoPII('info', 'init_proxy_configured', {
       duration_ms: Date.now() - proxyStart,
     })
     logForDebugging('[init] configureGlobalAgents complete')
+    console.log('DEBUG: init() after configureGlobalAgents');
     profileCheckpoint('init_network_configured')
 
     // Preconnect to the Anthropic API — overlap TCP+TLS handshake
