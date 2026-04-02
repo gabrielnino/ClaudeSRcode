@@ -4,6 +4,7 @@ import type { Command } from '../../commands.js';
 import type { Tool } from '../../Tool.js';
 import type { MCPServerConnection, ScopedMcpServerConfig, ServerResource } from './types.js';
 import { useManageMCPConnections } from './useManageMCPConnections.js';
+import { featureToggles } from '../../utils/featureToggles.js';
 interface MCPConnectionContextValue {
   reconnectMcpServer: (serverName: string) => Promise<{
     client: MCPServerConnection;
@@ -42,6 +43,11 @@ export function MCPConnectionManager(t0) {
     dynamicMcpConfig,
     isStrictMcpConfig
   } = t0;
+
+  if (featureToggles.isMcpDisabled()) {
+    return <>{children}</>;
+  }
+
   const {
     reconnectMcpServer,
     toggleMcpServer

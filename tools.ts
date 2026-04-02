@@ -1,5 +1,6 @@
 // biome-ignore-all assist/source/organizeImports: ANT-ONLY import markers must not be reordered
 import { toolMatchesName, type Tool, type Tools } from './Tool.js'
+import { featureToggles } from './utils/featureToggles.js'
 import { AgentTool } from './tools/AgentTool/AgentTool.js'
 import { SkillTool } from './tools/SkillTool/SkillTool.js'
 import { BashTool } from './tools/BashTool/BashTool.js'
@@ -247,7 +248,24 @@ export function getAllBaseTools(): Tools {
     // Include ToolSearchTool when tool search might be enabled (optimistic check)
     // The actual decision to defer tools happens at request time in claude.ts
     ...(isToolSearchEnabledOptimistic() ? [ToolSearchTool] : []),
-  ]
+  ].filter(tool => {
+    // Dynamic feature toggles
+    if (featureToggles.isExperimentalToolsDisabled()) {
+      const experimentalTools = new Set([
+        'Agent', 'NotebookEdit', 'Skill', 'Plan', 'TaskCreate', 'TaskUpdate',
+        'TaskStop', 'TaskGet', 'TaskList', 'TaskOutput', 'Todo', 'Brief', 'Workflow'
+      ])
+      if (experimentalTools.has(tool.name) || tool.name.includes('Task') || tool.name.includes('Plan')) {
+        return false
+      }
+    }
+    if (featureToggles.isMcpDisabled()) {
+      if (tool.name.includes('Mcp') || tool.name.includes('MCP') || tool.name === 'ListMcpResources' || tool.name === 'ReadMcpResource') {
+        return false
+      }
+    }
+    return true
+  })
 }
 
 /**
@@ -347,6 +365,11 @@ export function assembleToolPool(
   mcpTools: Tools,
 ): Tools {
   const builtInTools = getTools(permissionContext)
+
+  // Filter out all MCP tools if MCP is globally disabled
+  if (featureToggles.isMcpDisabled()) {
+    return builtInTools
+  }
 
   // Filter out MCP tools that are in the deny list
   const allowedMcpTools = filterToolsByDenyRules(mcpTools, permissionContext)

@@ -17,6 +17,7 @@
  * Usage: `myString as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS`
  */
 export type AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS = never
+import { featureToggles } from '../../utils/featureToggles.js'
 
 /**
  * Marker type for values routed to PII-tagged proto columns via `_PROTO_*`
@@ -136,6 +137,7 @@ export function logEvent(
   // to avoid accidentally logging code/filepaths
   metadata: LogEventMetadata,
 ): void {
+  if (featureToggles.isAnalyticsDisabled()) return;
   if (sink === null) {
     eventQueue.push({ eventName, metadata, async: false })
     return
@@ -156,6 +158,7 @@ export async function logEventAsync(
   // intentionally no strings, to avoid accidentally logging code/filepaths
   metadata: LogEventMetadata,
 ): Promise<void> {
+  if (featureToggles.isAnalyticsDisabled()) return;
   if (sink === null) {
     eventQueue.push({ eventName, metadata, async: true })
     return

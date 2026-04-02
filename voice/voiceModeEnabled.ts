@@ -1,4 +1,5 @@
 import { feature } from 'bun:bundle'
+import { featureToggles } from '../utils/featureToggles.js'
 import { getFeatureValue_CACHED_MAY_BE_STALE } from '../services/analytics/growthbook.js'
 import {
   getClaudeAIOAuthTokens,
@@ -14,6 +15,7 @@ import {
  * should be *visible* (e.g., command registration, config UI).
  */
 export function isVoiceGrowthBookEnabled(): boolean {
+  if (featureToggles.isQolDisabled()) return false;
   // Positive ternary pattern — see docs/feature-gating.md.
   // Negative pattern (if (!feature(...)) return) does not eliminate
   // inline string literals from external builds.

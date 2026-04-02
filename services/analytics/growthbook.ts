@@ -1,5 +1,6 @@
 import { GrowthBook } from '@growthbook/growthbook'
 import { isEqual, memoize } from 'lodash-es'
+import { featureToggles } from '../../utils/featureToggles.js'
 import {
   getIsNonInteractiveSession,
   getSessionTrustAccepted,
@@ -420,6 +421,7 @@ function syncRemoteEvalToDisk(): void {
  * Check if GrowthBook operations should be enabled
  */
 function isGrowthBookEnabled(): boolean {
+  if (featureToggles.isGrowthBookDisabled()) return false;
   // GrowthBook depends on 1P event logging.
   return is1PEventLoggingEnabled()
 }

@@ -1,4 +1,5 @@
 import type { BetaContentBlock } from '@anthropic-ai/sdk/resources/beta/messages/messages.mjs'
+import { featureToggles } from '../utils/featureToggles.js'
 import { createHash, randomUUID, type UUID } from 'crypto'
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import isPlainObject from 'lodash-es/isPlainObject.js'
@@ -21,6 +22,7 @@ import { normalizeMessagesForAPI } from '../utils/messages.js'
 import { jsonParse, jsonStringify } from '../utils/slowOperations.js'
 
 function shouldUseVCR(): boolean {
+  if (featureToggles.isQolDisabled()) return false;
   if (process.env.NODE_ENV === 'test') {
     return true
   }
